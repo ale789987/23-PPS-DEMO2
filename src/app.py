@@ -3,7 +3,6 @@
 # - con Heroku CLI
 # - sin usar GitHub
 #   Aunque luego al final lo manda a GitHub
-# otra cosa
 
 from flask import Flask, render_template
 from datetime import datetime
