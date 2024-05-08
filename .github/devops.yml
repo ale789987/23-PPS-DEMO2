@@ -1,0 +1,63 @@
+name: flake8 Lint
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - src/**
+  pull_request:
+    branches: [ main ]
+    paths:
+      - src/**
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    name: Lint con flake8
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+
+  build:
+    name: Docker push and build
+    runs-on: ubuntu-latest
+    needs: Lint
+    steps:
+      - uses: actions/checkout@v2
+          
+      - name: Login to DockerHub
+        uses: docker/login-action@v2 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true 
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/galeria:lates
+
+  aws:
+    name: Deploy image to aws
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: multiple command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOSTNAME }}
+        username: ${{ secrets.USER_NAME }}
+        key: ${{ secrets.AWS_PRIVATE_KEY }}
+        port: 22  # ${{ secrets.PORT }}
+        script: |
+            sleep 60
+            docker stop web && docker rm web
+            docker rmi angoies/galeria
+            docker run -d -p 80:5000 --name web angoies/galeria
