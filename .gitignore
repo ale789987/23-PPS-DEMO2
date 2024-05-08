@@ -7,4 +7,4 @@ venv/lib/
 venv/lib64/
 venv/share/
 venv/pyenv.cfg
-labsuser.pem
+./labsuser.pem
