@@ -23,7 +23,7 @@ def homepage():
     return render_template("index.html", the_time=the_time, tema="cats")
 
     # return f"""
-    # <h1>Hello herok</h1>
+    # <h1>Hello heroku</h1>
     # <p>It is currently {the_time}.</p>
     # <img src="http://loremflickr.com/600/400" />
     # """
