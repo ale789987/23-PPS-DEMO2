@@ -1,0 +1,10 @@
+venv/
+venv/__pycache__/
+venv/lib/python*/site-packages/
+venv/bin/
+venv/include/
+venv/lib/
+venv/lib64/
+venv/share/
+venv/pyenv.cfg
+labsuser.pem
